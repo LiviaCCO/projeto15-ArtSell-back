@@ -7,8 +7,8 @@ const signUp = async (req, res) => {
   const passwordHash = bcrypt.hashSync(password, 10);
 
   try {
-    const user = await db.collection('users').findOne({ email });
-    if (user) return res.status(409).send("E-mail já cadastrado!")
+    const user = await db.collection('users').findOne({ cpfCnpj });
+    if (user) return res.status(409).send("Usuário já cadastrado!")
     await db.collection('users').insertOne({
       cpfCnpj,
       name,
@@ -33,7 +33,7 @@ const signIn = async (req, res) => {
     const checkPassword = bcrypt.compareSync(password, user.password);
     if (!checkPassword) return res.status(401).send("Senha inválida");
 
-    await db.collection('sessions').insertOne({ email, token });
+    await db.collection('sessions').insertOne({ cpfCnpj, token });
     res.send(token);
   } catch (err) {
     res.status(500).send(err.message);
