@@ -1,13 +1,15 @@
-import express from "express";
-import * as userControllers from "../controllers/userControllers.js";
-import {
-  signUpMiddleware,
-  loginMiddleware
-} from "../middlewares/userMiddlewares.js";
+import { Router } from "express";
+import { signIn, signUp, logout } from "../controllers/userControllers.js";
+import authValidation from "../middlewares/auth.js";
+import { validateSchema } from "../middlewares/validateSchema.js";
+import { registerSchema, loginSchema } from "../schemas/userSchema.js";
 
-const router = express.Router();
+const userRoutes = Router();
 
-router.post("/sign-up", signUpMiddleware, userControllers.signUp);
-router.post("/login", loginMiddleware, userControllers.login);
+userRoutes.post("/sign-up", validateSchema(registerSchema), signUp);
+userRoutes.post("/login", validateSchema(loginSchema), signIn);
+userRoutes.post("/logout", authValidation, logout);
 
-export default router;
+export default userRoutes;
+
+
