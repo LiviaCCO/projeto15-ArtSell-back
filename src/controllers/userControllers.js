@@ -40,7 +40,7 @@ const signIn = async (req, res) => {
   }
 }
 
-async function logout(req, res) {
+const logout = async (req, res) => {
   const { token } = res.locals.session
 
   try {
